@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {  
+export async function POST(req: NextRequest) {
   const user = await currentUser();
 
   const users = await db
@@ -26,5 +26,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(result[0]);
   }
 
+  console.log(users[0]);
   return NextResponse.json(users[0] ?? {});
 }

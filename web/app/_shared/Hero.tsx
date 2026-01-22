@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BackgroundBoxes } from "@/components/theme/background";
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, Loader } from "lucide-react";
 import { suggestions } from "@/data/constant";
 import {
   InputGroup,
@@ -21,9 +21,11 @@ import {
 import { Rocket, Ship } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 const Hero = () => {
   const [userInput, setUserInput] = useState<string>();
   const [device, setDevice] = useState<string>("website");
+  const [loading, setLoading] = useState(false);
   const words = [
     {
       text: "Design",
@@ -59,13 +61,28 @@ const Hero = () => {
   const router = useRouter();
 
   const user = useUser();
-  function onCreateProject() {
+  
+  async function onCreateProject() {
     if (!user) {
       router.push("/sign-in");
       return;
     }
 
     //create new project
+
+    if (!userInput) {
+      return;
+    }
+    setLoading(true);
+    const projectId = crypto.randomUUID();
+    const result = await axios.post("/api/project", {
+      projectId: projectId,
+      userInput: userInput,
+      device: device,
+    });
+
+    console.log(result.data);
+    setLoading(false);
   }
   return (
     <div>
@@ -105,6 +122,7 @@ const Hero = () => {
               </SelectContent>
             </Select>
             <InputGroupButton
+              disabled={loading}
               className="ml-auto"
               size="sm"
               variant="outline"
@@ -112,7 +130,11 @@ const Hero = () => {
                 onCreateProject();
               }}
             >
-              <Rocket className="" />
+              {loading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                <Rocket className="" />
+              )}
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
