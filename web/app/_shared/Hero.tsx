@@ -61,14 +61,12 @@ const Hero = () => {
   const router = useRouter();
 
   const user = useUser();
-  
+
   async function onCreateProject() {
     if (!user) {
       router.push("/sign-in");
       return;
     }
-
-    //create new project
 
     if (!userInput) {
       return;
@@ -83,6 +81,8 @@ const Hero = () => {
 
     console.log(result.data);
     setLoading(false);
+
+    router.push(`/project/${projectId}`);
   }
   return (
     <div>
