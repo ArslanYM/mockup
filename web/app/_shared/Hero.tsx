@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { BackgroundBoxes } from "@/components/theme/background";
+import { Background, BackgroundBoxes } from "@/components/theme/background";
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { ArrowRightIcon, Loader } from "lucide-react";
@@ -86,7 +86,7 @@ const Hero = () => {
   }
   return (
     <div>
-      <BackgroundBoxes />
+      <Background />
       <div className="flex flex-col items-center justify-center gap-6 mt-20 p-10 md:px-24">
         <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
           <span>✨ Introducing Mockup</span>
