@@ -7,43 +7,50 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { ProjectType, ScreenConfigType } from "@/type/types";
 import { LoaderFive } from "@/components/ui/loader";
+import Canvas from "../_shared/Canvas";
+import { Loader } from "lucide-react";
 
 const ProjectCanvasPlayground = () => {
   const [loading, setLoading] = useState(false);
   const { projectid } = useParams();
   const [projectDetail, setProjectDetail] = useState<ProjectType>();
   const [loadingMsg, setLoadingMsg] = useState("");
+  // const [screenConfigOriginal, setScreenConfigOriginal] = useState<
+  //   ScreenConfigType[[]]
+  // >([]);
   const [screenConfig, setScreenConfig] = useState<ScreenConfigType[]>([]);
+
+  useEffect(() => {
+    projectid! && GetProjectDetail();
+  }, []);
 
   const GetProjectDetail = async () => {
     setLoadingMsg("Generating Canvas...");
     setLoading(true);
     const result = await axios.get(`/api/project?projectId=` + projectid);
     setProjectDetail(result?.data?.projectDetail);
+    // setScreenConfigOriginal(result?.data?.screenConfigOriginal);
     setScreenConfig(result?.data?.screenConfig);
-
-    // if (result?.data?.screenConfig.length == 0) {
-    //   // eslint-disable-next-line react-hooks/immutability
-    //   generateScreenConfig();
-    // }
     setLoading(false);
     setLoadingMsg("");
   };
-  useEffect(() => {
-    projectid! && GetProjectDetail();
-  }, []);
 
   useEffect(() => {
-    if (projectDetail && screenConfig && screenConfig.length == 0) {
+    if (
+      projectDetail &&
+      screenConfig &&
+      screenConfig.length == 0
+    ) {
       // eslint-disable-next-line react-hooks/immutability
       generateScreenConfig();
     } else if (projectDetail && screenConfig) {
       // eslint-disable-next-line react-hooks/immutability
       GenerateScreenUIUX();
     }
-  }, [projectDetail && screenConfig]);
+  }, [screenConfig]);
 
   async function generateScreenConfig() {
+    console.log("generating screen config");
     setLoadingMsg("Generating Screen Config...");
     setLoading(true);
     const result = await axios.post("/api/generate-config", {
@@ -51,11 +58,13 @@ const ProjectCanvasPlayground = () => {
       deviceType: projectDetail?.device,
       projectId: projectid,
     });
+    console.log(result);
     GetProjectDetail();
     setLoading(false);
   }
 
   async function GenerateScreenUIUX() {
+    console.log("generating UIIX ");
     setLoadingMsg("Generating UI UX...");
     setLoading(true);
 
@@ -79,15 +88,24 @@ const ProjectCanvasPlayground = () => {
   return (
     <div>
       <ProjectHeader />
-      <div>
+      <div className="flex  ">
         {
           <div className="left-1/2 top-20 absolute  items-center">
             {loading && <LoaderFive text={loadingMsg} />}
           </div>
         }
         {/* settings */}
-        <SectionSettings projectDetail={projectDetail} />
+        {projectDetail ? (
+          <SectionSettings projectDetail={projectDetail} />
+        ) : (
+          <Loader className="animate-spin" />
+        )}
         {/* canvas */}
+        <Canvas
+          projectDetail={projectDetail}
+          screenConfig={screenConfig}
+          loading={loading}
+        />
       </div>
     </div>
   );

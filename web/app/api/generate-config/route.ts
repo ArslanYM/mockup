@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const { userInput, deviceType, projectId } = await req.json();
 
   const aiResult = await openrouter.chat.send({
-    model: "tngtech/deepseek-r1t-chimera:free",
+    model: "tngtech/deepseek-r1t2-chimera:free",
     messages: [
       {
         role: "system",
@@ -27,11 +27,10 @@ export async function POST(req: NextRequest) {
     ],
     stream: false,
   });
-
+  console.log(aiResult);
   const JSONAiResult = JSON.parse(
     aiResult?.choices[0]?.message?.content as string,
   );
-
   if (JSONAiResult) {
     await db
       .update(ProjectTable)

@@ -28,7 +28,7 @@ function SectionSettings({ projectDetail }: Props) {
         <div className="mt-6">
           <h2 className="text-sm mb-1">Project Name</h2>
           <Input
-            value={projectName}
+            value={projectName || ""}
             onChange={(e) => {
               setProjectName(e.target.value);
             }}

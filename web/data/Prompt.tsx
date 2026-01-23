@@ -124,7 +124,6 @@ AVAILABLE THEME STYLES
 ${THEME_NAME_LIST}
 `;
 
-
 export const GENERATE_SCREEN_PROMPT = `
 You are an elite UI/UX designer creating Dribbble-quality HTML UI mockups for Web and Mobile using Tailwind CSS and CSS variables.
 ────────────────────────────────────────
@@ -251,4 +250,4 @@ No forbidden content?
 Generate a stunning, production-ready UI mockup.
 Start with 
 . End at last closing tag.
-`
+`;
