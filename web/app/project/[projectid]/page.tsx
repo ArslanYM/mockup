@@ -37,6 +37,9 @@ const ProjectCanvasPlayground = () => {
     if (projectDetail && screenConfig && screenConfig.length == 0) {
       // eslint-disable-next-line react-hooks/immutability
       generateScreenConfig();
+    } else if (projectDetail && screenConfig) {
+      // eslint-disable-next-line react-hooks/immutability
+      GenerateScreenUIUX();
     }
   }, [projectDetail && screenConfig]);
 
@@ -48,8 +51,29 @@ const ProjectCanvasPlayground = () => {
       deviceType: projectDetail?.device,
       projectId: projectid,
     });
-    console.log(result.data);
     GetProjectDetail();
+    setLoading(false);
+  }
+
+  async function GenerateScreenUIUX() {
+    setLoadingMsg("Generating UI UX...");
+    setLoading(true);
+
+    for (let index = 0; index < screenConfig.length; index++) {
+      const screen = screenConfig[index];
+      if (screen?.code) continue;
+      setLoadingMsg("Generating Screen " + index);
+      const result = await axios.post("/api/generate-screen-ui", {
+        projectId: projectid,
+        screenId: screen.screenId,
+        screenName: screen.screenName,
+        purpose: screen.purpose,
+        screenDescription: screen.screenDescription,
+      });
+      setScreenConfig((prev) =>
+        prev.map((item, i) => (i === index ? result.data : item)),
+      );
+    }
     setLoading(false);
   }
   return (
@@ -62,7 +86,7 @@ const ProjectCanvasPlayground = () => {
           </div>
         }
         {/* settings */}
-        <SectionSettings  projectDetail={projectDetail} />
+        <SectionSettings projectDetail={projectDetail} />
         {/* canvas */}
       </div>
     </div>

@@ -13,7 +13,7 @@ type Props = {
 };
 function SectionSettings({ projectDetail }: Props) {
   const [selectedTheme, setSelectedTheme] = useState("");
-  const [projectName, setProjectName] = useState(projectDetail?.projectName);
+  const [projectName, setProjectName] = useState("");
   const [userNewScreenInput, setuserNewScreenInput] = useState("");
 
   useEffect(() => {
