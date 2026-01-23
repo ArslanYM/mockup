@@ -4,13 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { THEME_NAME_LIST, THEMES } from "@/data/Themes";
+import { ProjectType } from "@/type/types";
 import { Camera, Share, Sparkles } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function SectionSettings() {
+type Props = {
+  projectDetail: ProjectType | undefined;
+};
+function SectionSettings({ projectDetail }: Props) {
   const [selectedTheme, setSelectedTheme] = useState("");
-  const [projectName, setProjectName] = useState("");
+  const [projectName, setProjectName] = useState(projectDetail?.projectName);
   const [userNewScreenInput, setuserNewScreenInput] = useState("");
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, react-hooks/set-state-in-effect
+    projectDetail && setProjectName(projectDetail?.projectName);
+  }, [projectDetail]);
 
   return (
     <>
@@ -19,6 +28,7 @@ function SectionSettings() {
         <div className="mt-6">
           <h2 className="text-sm mb-1">Project Name</h2>
           <Input
+            value={projectName}
             onChange={(e) => {
               setProjectName(e.target.value);
             }}
