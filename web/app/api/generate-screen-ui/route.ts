@@ -4,17 +4,10 @@ import { ScreenConfigTable } from "@/config/schema";
 import { GENERATE_SCREEN_PROMPT } from "@/data/Prompt";
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import { text } from "stream/consumers";
 
 export async function POST(req: NextRequest) {
-  const {
-    projectId,
-    screenId,
-    screenName,
-    purpose,
-    screenDescription,
-    projectVisualDescription,
-  } = await req.json();
+  const { projectId, screenId, screenName, purpose, screenDescription } =
+    await req.json();
 
   const userInput = `
   
@@ -25,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const aiResult = await openrouter.chat.send({
-      model: "tngtech/deepseek-r1t-chimera:free",
+      model: process.env.OPENROUTER_API_MODEL,
       messages: [
         {
           role: "system",

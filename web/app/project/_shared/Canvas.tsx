@@ -17,7 +17,7 @@ const Canvas = ({ projectDetail, screenConfig, loading }: Props) => {
   const GAP = isMobile ? 30 : 70;
   return (
     <div
-      className="w-full h-screen cursor-pointer bg-gray-800/70"
+      className="w-full h-screen cursor-pointer bg-white"
       style={{
         backgroundImage:
           "radial-gradient(rgba(0,0,0,0.15) 1px, transparent 1px)",
@@ -25,8 +25,8 @@ const Canvas = ({ projectDetail, screenConfig, loading }: Props) => {
       }}
     >
       <TransformWrapper
-        initialScale={0.7}
-        minScale={0.7}
+        initialScale={0.4}
+        minScale={0.4}
         maxScale={3}
         initialPositionX={50}
         initialPositionY={50}

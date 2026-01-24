@@ -36,11 +36,7 @@ const ProjectCanvasPlayground = () => {
   };
 
   useEffect(() => {
-    if (
-      projectDetail &&
-      screenConfig &&
-      screenConfig.length == 0
-    ) {
+    if (projectDetail && screenConfig && screenConfig.length == 0) {
       // eslint-disable-next-line react-hooks/immutability
       generateScreenConfig();
     } else if (projectDetail && screenConfig) {
@@ -53,6 +49,7 @@ const ProjectCanvasPlayground = () => {
     console.log("generating screen config");
     setLoadingMsg("Generating Screen Config...");
     setLoading(true);
+    console.log(projectDetail?.device);
     const result = await axios.post("/api/generate-config", {
       userInput: projectDetail?.userInput,
       deviceType: projectDetail?.device,
@@ -64,7 +61,6 @@ const ProjectCanvasPlayground = () => {
   }
 
   async function GenerateScreenUIUX() {
-    console.log("generating UIIX ");
     setLoadingMsg("Generating UI UX...");
     setLoading(true);
 

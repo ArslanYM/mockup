@@ -68,11 +68,12 @@ const Hero = () => {
       return;
     }
 
-    if (!userInput) {
+    if (!userInput && !device) {
       return;
     }
     setLoading(true);
     const projectId = crypto.randomUUID();
+
     const result = await axios.post("/api/project", {
       projectId: projectId,
       userInput: userInput,
@@ -107,12 +108,7 @@ const Hero = () => {
             placeholder="I want to create a mockup for my..."
           />
           <InputGroupAddon align="block-end">
-            <Select
-              defaultValue="mobile"
-              onValueChange={(value) => {
-                setDevice(value!);
-              }}
-            >
+            <Select value={device} onValueChange={setDevice}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
@@ -133,7 +129,10 @@ const Hero = () => {
               {loading ? (
                 <Loader className="animate-spin" />
               ) : (
-                <Rocket className="" />
+                <div className="flex gap-2">
+                  <Rocket className="" />
+                  Ship
+                </div>
               )}
             </InputGroupButton>
           </InputGroupAddon>

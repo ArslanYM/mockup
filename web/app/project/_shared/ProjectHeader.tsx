@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/theme/mode-toggle";
 
 export function ProjectHeader({}) {
   return (
@@ -20,6 +21,7 @@ export function ProjectHeader({}) {
         </a>
 
         <div className="hidden items-center gap-4 md:flex">
+          <ModeToggle />
           <Button>
             <Save /> Save
           </Button>

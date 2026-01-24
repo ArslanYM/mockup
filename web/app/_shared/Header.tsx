@@ -12,6 +12,7 @@ import {
   UserAvatar,
   UserButton,
 } from "@clerk/nextjs";
+import { ModeToggle } from "@/components/theme/mode-toggle";
 
 interface HeaderProps {
   logoSrc?: string;
@@ -71,7 +72,6 @@ export function Header({
           />
           <span className="mr-6 text-xl font-semibold">{"Mockup"}</span>
         </a>
-
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-8 md:flex">
           {currentNavigation.map((item) => (
@@ -84,8 +84,8 @@ export function Header({
             </Link>
           ))}
         </div>
-
         <div className="hidden items-center gap-4 md:flex">
+          <ModeToggle />
           <SignedIn>
             <Button asChild>
               <Link href={currentGetStartedHref}>{"Get Started"}</Link>
@@ -98,7 +98,7 @@ export function Header({
             </Button>
           </SignedOut>
         </div>
-
+        {/* //TODO: fix mobile navigation */}
         {/* Mobile Navigation */}
         <Sheet>
           <SheetTrigger asChild className="md:hidden">

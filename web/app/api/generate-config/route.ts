@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const { userInput, deviceType, projectId } = await req.json();
 
   const aiResult = await openrouter.chat.send({
-    model: "tngtech/deepseek-r1t2-chimera:free",
+    model: process.env.OPENROUTER_API_MODEL,
     messages: [
       {
         role: "system",
