@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { SettingContext } from "@/context/SettingContext";
 import { THEME_NAME_LIST, THEMES } from "@/data/Themes";
 import { ProjectType } from "@/type/types";
 import { Camera, Share, Sparkles } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 type Props = {
   projectDetail: ProjectType | undefined;
@@ -15,10 +16,12 @@ function SectionSettings({ projectDetail }: Props) {
   const [selectedTheme, setSelectedTheme] = useState("");
   const [projectName, setProjectName] = useState("");
   const [userNewScreenInput, setuserNewScreenInput] = useState("");
+  const { settingDetail, setSettingDetail } = useContext(SettingContext);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions, react-hooks/set-state-in-effect
     projectDetail && setProjectName(projectDetail?.projectName);
+    setSelectedTheme(projectDetail?.theme as string);
   }, [projectDetail]);
 
   return (

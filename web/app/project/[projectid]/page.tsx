@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { ProjectHeader } from "../_shared/ProjectHeader";
 import SectionSettings from "../_shared/SectionSettings";
 import axios from "axios";
@@ -9,12 +9,15 @@ import { ProjectType, ScreenConfigType } from "@/type/types";
 import { LoaderFive } from "@/components/ui/loader";
 import Canvas from "../_shared/Canvas";
 import { Loader } from "lucide-react";
+import { SettingContext } from "@/context/SettingContext";
 
 const ProjectCanvasPlayground = () => {
   const [loading, setLoading] = useState(false);
   const { projectid } = useParams();
   const [projectDetail, setProjectDetail] = useState<ProjectType>();
   const [loadingMsg, setLoadingMsg] = useState("");
+  const { settingDetail, setSettingDetail } = useContext(SettingContext);
+  // TODO: fix screenConfig being called twice by creating proxy state
   // const [screenConfigOriginal, setScreenConfigOriginal] = useState<
   //   ScreenConfigType[[]]
   // >([]);
@@ -31,6 +34,7 @@ const ProjectCanvasPlayground = () => {
     setProjectDetail(result?.data?.projectDetail);
     // setScreenConfigOriginal(result?.data?.screenConfigOriginal);
     setScreenConfig(result?.data?.screenConfig);
+    setSettingDetail(result?.data?.projectDetail);
     setLoading(false);
     setLoadingMsg("");
   };

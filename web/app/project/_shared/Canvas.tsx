@@ -1,7 +1,13 @@
 import React, { useState } from "react";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import {
+  TransformComponent,
+  TransformWrapper,
+  useControls,
+} from "react-zoom-pan-pinch";
 import ScreenFrame from "./ScreenFrame";
 import { ProjectType, ScreenConfigType } from "@/type/types";
+import { Minus, Plus, RefreshCcw, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   projectDetail: ProjectType | undefined;
@@ -15,6 +21,24 @@ const Canvas = ({ projectDetail, screenConfig, loading }: Props) => {
   const SCREEN_W = isMobile ? 400 : 1200;
   const SCREEN_H = isMobile ? 800 : 800;
   const GAP = isMobile ? 30 : 70;
+
+  const Controls = () => {
+    const { zoomIn, zoomOut, resetTransform } = useControls();
+
+    return (
+      <div className="tools absolute p-3 px-5 bg-primary shadow flex gap-3 border bottom-10 left-1/2 z-30">
+        <Button variant={"ghost"} size={"sm"} onClick={() => zoomIn()}>
+          <Plus />
+        </Button>
+        <Button variant={"ghost"} size={"sm"} onClick={() => zoomOut()}>
+          <Minus />
+        </Button>
+        <Button variant={"ghost"} size={"sm"} onClick={() => resetTransform()}>
+          <RefreshCcw />
+        </Button>
+      </div>
+    );
+  };
   return (
     <div
       className="w-full h-screen cursor-pointer bg-white"
@@ -35,20 +59,27 @@ const Canvas = ({ projectDetail, screenConfig, loading }: Props) => {
         doubleClick={{ disabled: false }}
         panning={{ disabled: !panningEnabled }}
       >
-        <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
-          {screenConfig.map((screen, index) => (
-            <ScreenFrame
-              key={index}
-              x={index * (SCREEN_W + GAP)}
-              y={0}
-              width={SCREEN_W}
-              height={SCREEN_H}
-              setPanningEnabled={setPanningEnabled}
-              htmlCode={screen?.code}
-              projectDetail={projectDetail}
-            />
-          ))}
-        </TransformComponent>
+        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+          <>
+            <Controls />
+            <TransformComponent
+              wrapperStyle={{ width: "100%", height: "100%" }}
+            >
+              {screenConfig.map((screen, index) => (
+                <ScreenFrame
+                  key={index}
+                  x={index * (SCREEN_W + GAP)}
+                  y={0}
+                  width={SCREEN_W}
+                  height={SCREEN_H}
+                  setPanningEnabled={setPanningEnabled}
+                  htmlCode={screen?.code}
+                  projectDetail={projectDetail}
+                />
+              ))}
+            </TransformComponent>
+          </>
+        )}
       </TransformWrapper>
     </div>
   );
