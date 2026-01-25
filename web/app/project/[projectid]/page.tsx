@@ -105,7 +105,10 @@ const ProjectCanvasPlayground = () => {
         }
         {/* settings */}
         {projectDetail ? (
-          <SectionSettings projectDetail={projectDetail} />
+          <SectionSettings
+            projectDetail={projectDetail}
+            screenDescription={screenConfig[0]?.screenDescription}
+          />
         ) : (
           <Loader className="animate-spin" />
         )}
