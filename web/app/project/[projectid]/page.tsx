@@ -10,6 +10,7 @@ import { LoaderFive } from "@/components/ui/loader";
 import Canvas from "../_shared/Canvas";
 import { Loader } from "lucide-react";
 import { SettingContext } from "@/context/SettingContext";
+import { RefreshDataContext } from "@/context/RefreshDataContext";
 
 const ProjectCanvasPlayground = () => {
   const [loading, setLoading] = useState(false);
@@ -17,6 +18,7 @@ const ProjectCanvasPlayground = () => {
   const [projectDetail, setProjectDetail] = useState<ProjectType>();
   const [loadingMsg, setLoadingMsg] = useState("");
   const { settingDetail, setSettingDetail } = useContext(SettingContext);
+  const { refreshData, setRefreshData } = useContext(RefreshDataContext);
   // TODO: fix screenConfig being called twice by creating proxy state
   // const [screenConfigOriginal, setScreenConfigOriginal] = useState<
   //   ScreenConfigType[[]]
@@ -26,6 +28,13 @@ const ProjectCanvasPlayground = () => {
   useEffect(() => {
     projectid! && GetProjectDetail();
   }, []);
+
+  //refresh screenConfig after del
+  useEffect(() => {
+    if (refreshData?.method == "screenConfig") {
+      GetProjectDetail();
+    }
+  }, [refreshData]);
 
   const GetProjectDetail = async () => {
     setLoadingMsg("Generating Canvas...");

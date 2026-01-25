@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Background, BackgroundBoxes } from "@/components/theme/background";
+import { Background } from "@/components/theme/background";
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { ArrowRightIcon, Loader } from "lucide-react";

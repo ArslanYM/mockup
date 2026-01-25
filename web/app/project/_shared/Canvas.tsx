@@ -26,7 +26,7 @@ const Canvas = ({ projectDetail, screenConfig, loading }: Props) => {
     const { zoomIn, zoomOut, resetTransform } = useControls();
 
     return (
-      <div className="tools absolute p-3 px-5 bg-primary shadow flex gap-3 border bottom-10 left-1/2 z-30">
+      <div className="text-white  tools absolute p-3 px-5 bg-primary shadow flex gap-3 border bottom-10 left-1/2 z-30">
         <Button variant={"ghost"} size={"sm"} onClick={() => zoomIn()}>
           <Plus />
         </Button>
@@ -75,6 +75,7 @@ const Canvas = ({ projectDetail, screenConfig, loading }: Props) => {
                   setPanningEnabled={setPanningEnabled}
                   htmlCode={screen?.code}
                   projectDetail={projectDetail}
+                  screen={screen}
                 />
               ))}
             </TransformComponent>

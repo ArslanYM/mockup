@@ -1,7 +1,6 @@
 import { SettingContext } from "@/context/SettingContext";
 import { THEMES, themeToCssVars } from "@/data/Themes";
-import { ProjectType } from "@/type/types";
-import { GripVertical } from "lucide-react";
+import { ProjectType, ScreenConfigType } from "@/type/types";
 import React, {
   useCallback,
   useContext,
@@ -10,6 +9,8 @@ import React, {
   useState,
 } from "react";
 import { Rnd } from "react-rnd";
+import ScreenHandler from "./ScreenHandler";
+import { HtmlWrapper } from "@/data/constant";
 
 type Props = {
   x: number;
@@ -18,7 +19,8 @@ type Props = {
   width: number;
   height: number;
   htmlCode: string | undefined;
-  projectDetail: ProjectType;
+  projectDetail: ProjectType | undefined;
+  screen: ScreenConfigType | undefined;
 };
 const ScreenFrame = ({
   x,
@@ -28,37 +30,14 @@ const ScreenFrame = ({
   height,
   htmlCode,
   projectDetail,
+  screen,
 }: Props) => {
   const { settingDetail, setSettingDetail } = useContext(SettingContext);
   const [size, setSize] = useState({ width, height });
   const iframeReference = useRef<HTMLIFrameElement | null>(null);
   const theme = THEMES[settingDetail?.theme ?? projectDetail?.theme ?? ""];
 
-  const html = `
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Google Font -->
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-
-<!-- Tailwind + Iconify -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
-  <style >
-    ${themeToCssVars(theme)}
-  </style>
-</head>
-<body class="bg-[var(--background)] text-[var(--foreground)] w-full">
-  ${htmlCode ?? ""}
-</body>
-</html>
-`;
+  const html = HtmlWrapper(theme, htmlCode as string);
   const measureIframeHeight = useCallback(() => {
     const iframe = iframeReference.current;
     if (!iframe) return;
@@ -161,8 +140,13 @@ const ScreenFrame = ({
       }}
     >
       {" "}
-      <div className="drag-handle flex gap-2 cursor-move p-2 bg-primary">
-        <GripVertical className="h-6 w-6" /> Drag here
+      <div className="drag-handle flex gap-2 cursor-move p-2 bg-primary text-secondary mb-2">
+        <ScreenHandler
+          screen={screen}
+          theme={theme}
+          iframeRef={iframeReference}
+          projectId={projectDetail?.projectId}
+        />
       </div>
       <iframe
         ref={iframeReference}
