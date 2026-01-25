@@ -1,12 +1,16 @@
 import { db } from "@/config/db";
 import { openrouter } from "@/config/openrouter";
 import { ProjectTable, ScreenConfigTable } from "@/config/schema";
-import { APP_LAYOUT_CONFIG_PROMPT } from "@/data/Prompt";
+import {
+  APP_LAYOUT_CONFIG_PROMPT,
+  GENERATE_NEW_SCREEN_IN_EXISITING_PROJECT_PROJECT,
+} from "@/data/Prompt";
 import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 export async function POST(req: NextRequest) {
-  const { userInput, deviceType, projectId } = await req.json();
+  const { userInput, deviceType, projectId, oldScreenDescription, theme } =
+    await req.json();
 
   const aiResult = await openrouter.chat.send({
     model: process.env.OPENROUTER_API_MODEL,
@@ -16,13 +20,25 @@ export async function POST(req: NextRequest) {
         content: [
           {
             type: "text",
-            text: APP_LAYOUT_CONFIG_PROMPT.replace("{deviceType}", deviceType),
+            text: oldScreenDescription
+              ? GENERATE_NEW_SCREEN_IN_EXISITING_PROJECT_PROJECT.replace(
+                  "{deviceType}",
+                  deviceType,
+                ).replace("{theme}", theme)
+              : APP_LAYOUT_CONFIG_PROMPT.replace("{deviceType}", deviceType),
           },
         ],
       },
       {
         role: "user",
-        content: userInput,
+        content: [
+          {
+            type: "text",
+            text: oldScreenDescription
+              ? userInput + "Old Screen Description is:" + oldScreenDescription
+              : userInput,
+          },
+        ],
       },
     ],
     stream: false,
@@ -32,14 +48,16 @@ export async function POST(req: NextRequest) {
     aiResult?.choices[0]?.message?.content as string,
   );
   if (JSONAiResult) {
-    await db
-      .update(ProjectTable)
-      .set({
-        projectVisualDescription: JSONAiResult.projectVisualDescription,
-        projectName: JSONAiResult.projectName,
-        theme: JSONAiResult.theme,
-      })
-      .where(eq(ProjectTable.projectId, projectId as string));
+    !oldScreenDescription &&
+      (await db
+        .update(ProjectTable)
+        .set({
+          projectVisualDescription: JSONAiResult.projectVisualDescription,
+          projectName: JSONAiResult.projectName,
+          theme: JSONAiResult.theme,
+        })
+        .where(eq(ProjectTable.projectId, projectId as string)));
+
     JSONAiResult.screens?.forEach(async (screen: any) => {
       const result = await db.insert(ScreenConfigTable).values({
         projectId: projectId,
