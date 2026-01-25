@@ -2,7 +2,7 @@ import { db } from "@/config/db";
 import { ProjectTable, ScreenConfigTable } from "@/config/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   const { userInput, device, projectId } = await req.json();
@@ -26,6 +26,19 @@ export async function GET(req: NextRequest) {
   const user = await currentUser();
 
   try {
+    if (!projectId) {
+      const result = await db
+        .select()
+        .from(ProjectTable)
+        .where(
+          eq(
+            ProjectTable.userId,
+            user?.primaryEmailAddress?.emailAddress as string,
+          ),
+        )
+        .orderBy(desc(ProjectTable.id));
+      return NextResponse.json(result);
+    }
     const result = await db
       .select()
       .from(ProjectTable)

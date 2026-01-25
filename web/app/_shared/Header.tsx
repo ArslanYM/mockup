@@ -87,9 +87,9 @@ export function Header({
         <div className="hidden items-center gap-4 md:flex">
           <ModeToggle />
           <SignedIn>
-            <Button asChild>
+            {/* <Button asChild>
               <Link href={currentGetStartedHref}>{"Get Started"}</Link>
-            </Button>
+            </Button> */}
             <UserButton />
           </SignedIn>
           <SignedOut>
