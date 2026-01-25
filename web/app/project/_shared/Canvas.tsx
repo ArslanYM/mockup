@@ -41,7 +41,7 @@ const Canvas = ({ projectDetail, screenConfig, loading }: Props) => {
   };
   return (
     <div
-      className="w-full h-screen cursor-pointer bg-white"
+      className="w-full h-screen cursor-pointer bg-primary-foreground/10"
       style={{
         backgroundImage:
           "radial-gradient(rgba(0,0,0,0.15) 1px, transparent 1px)",

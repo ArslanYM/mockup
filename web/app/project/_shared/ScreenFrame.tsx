@@ -1,7 +1,14 @@
+import { SettingContext } from "@/context/SettingContext";
 import { THEMES, themeToCssVars } from "@/data/Themes";
 import { ProjectType } from "@/type/types";
 import { GripVertical } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Rnd } from "react-rnd";
 
 type Props = {
@@ -22,9 +29,11 @@ const ScreenFrame = ({
   htmlCode,
   projectDetail,
 }: Props) => {
+  const { settingDetail, setSettingDetail } = useContext(SettingContext);
   const [size, setSize] = useState({ width, height });
   const iframeReference = useRef<HTMLIFrameElement | null>(null);
-  const theme = THEMES[projectDetail?.theme ?? ""];
+  const theme = THEMES[settingDetail?.theme ?? projectDetail?.theme ?? ""];
+
   const html = `
 <!doctype html>
 <html>
@@ -42,7 +51,7 @@ const ScreenFrame = ({
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
   <style >
-    ${themeToCssVars(projectDetail?.theme)}
+    ${themeToCssVars(theme)}
   </style>
 </head>
 <body class="bg-[var(--background)] text-[var(--foreground)] w-full">
@@ -152,7 +161,7 @@ const ScreenFrame = ({
       }}
     >
       {" "}
-      <div className="drag-handle flex gap-2 cursor-move p-2 bg-primary/20">
+      <div className="drag-handle flex gap-2 cursor-move p-2 bg-primary">
         <GripVertical className="h-6 w-6" /> Drag here
       </div>
       <iframe

@@ -24,6 +24,14 @@ function SectionSettings({ projectDetail }: Props) {
     setSelectedTheme(projectDetail?.theme as string);
   }, [projectDetail]);
 
+  function onSelectTheme(theme: string) {
+    setSelectedTheme(theme);
+    setSettingDetail((prev: any) => ({
+      ...prev,
+      theme: theme,
+    }));
+  }
+
   return (
     <>
       <div className=" border-r w-[300px] h-[90vh] p-5 ">
@@ -34,6 +42,10 @@ function SectionSettings({ projectDetail }: Props) {
             value={projectName || ""}
             onChange={(e) => {
               setProjectName(e.target.value);
+              setSettingDetail((prev: any) => ({
+                ...prev,
+                projectName: projectName,
+              }));
             }}
             placeholder="Project Name"
           />
@@ -57,7 +69,7 @@ function SectionSettings({ projectDetail }: Props) {
                 return (
                   <div
                     onClick={() => {
-                      setSelectedTheme(theme);
+                      onSelectTheme(theme);
                     }}
                     key={index}
                     className={`${theme == selectedTheme && `border-primary bg-primary/20`} border p-2 m-2 cursor-pointer hover:animate-pulse`}

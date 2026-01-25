@@ -52,3 +52,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(error);
   }
 }
+
+export async function PUT(req: NextRequest) {
+  const { projectName, theme, projectId } = await req.json();
+
+  const result = await db
+    .update(ProjectTable)
+    .set({
+      theme: theme,
+      projectName: projectName,
+    })
+    .where(eq(ProjectTable.projectId, projectId))
+    .returning();
+  return NextResponse.json(result[0]);
+}
