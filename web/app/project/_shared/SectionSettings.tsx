@@ -16,8 +16,13 @@ import { toast } from "sonner";
 type Props = {
   projectDetail: ProjectType | undefined;
   screenDescription?: string | undefined;
+  takeScreenshot?: any;
 };
-function SectionSettings({ projectDetail, screenDescription }: Props) {
+function SectionSettings({
+  projectDetail,
+  screenDescription,
+  takeScreenshot,
+}: Props) {
   const [selectedTheme, setSelectedTheme] = useState("");
   const [projectName, setProjectName] = useState("");
   const [userNewScreenInput, setuserNewScreenInput] = useState("");
@@ -151,6 +156,9 @@ function SectionSettings({ projectDetail, screenDescription }: Props) {
         </div>
         <div className="mt-5 items-center gap-2 flex justify-center">
           <Button
+            onClick={() => {
+              takeScreenshot();
+            }}
             size={"sm"}
             variant={"outline"}
             className="mt-3  cursor-pointer"

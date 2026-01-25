@@ -27,6 +27,7 @@ export const ProjectTable = pgTable("project", {
   createdOn: date().defaultNow(),
   config: json(),
   projectVisualDescription: text(),
+  screenShot: text(),
 });
 
 export const ScreenConfigTable = pgTable("screenConfig", {
