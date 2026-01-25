@@ -19,6 +19,7 @@ const ProjectCanvasPlayground = () => {
   const [loadingMsg, setLoadingMsg] = useState("");
   const { settingDetail, setSettingDetail } = useContext(SettingContext);
   const { refreshData, setRefreshData } = useContext(RefreshDataContext);
+  const [takeScreenshot, setTakeScreenshot] = useState<any>();
   // TODO: fix screenConfig being called twice by creating proxy state
   // const [screenConfigOriginal, setScreenConfigOriginal] = useState<
   //   ScreenConfigType[[]]
@@ -93,6 +94,7 @@ const ProjectCanvasPlayground = () => {
       );
     }
     setLoading(false);
+    takeScreenshot(Date.now());
   }
   return (
     <div>
@@ -108,6 +110,7 @@ const ProjectCanvasPlayground = () => {
           <SectionSettings
             projectDetail={projectDetail}
             screenDescription={screenConfig[0]?.screenDescription}
+            takeScreenshot={() => setTakeScreenshot(Date.now())}
           />
         ) : (
           <Loader className="animate-spin" />
@@ -117,6 +120,7 @@ const ProjectCanvasPlayground = () => {
           projectDetail={projectDetail}
           screenConfig={screenConfig}
           loading={loading}
+          takeScreenshot={takeScreenshot}
         />
       </div>
     </div>

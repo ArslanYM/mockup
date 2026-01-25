@@ -54,13 +54,14 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const { projectName, theme, projectId } = await req.json();
+  const { projectName, theme, projectId, screenShot } = await req.json();
 
   const result = await db
     .update(ProjectTable)
     .set({
       theme: theme,
       projectName: projectName,
+      screenShot: (screenShot as string) ?? null,
     })
     .where(eq(ProjectTable.projectId, projectId))
     .returning();
