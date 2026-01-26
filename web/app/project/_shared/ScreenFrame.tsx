@@ -37,6 +37,7 @@ const ScreenFrame = ({
   const { settingDetail, setSettingDetail } = useContext(SettingContext);
   const [size, setSize] = useState({ width, height });
   // const iframeReference = useRef<HTMLIFrameElement | null>(null);
+  //@ts-expect-error theme can be of any type
   const theme = THEMES[settingDetail?.theme ?? projectDetail?.theme ?? ""];
 
   const html = HtmlWrapper(theme, htmlCode as string);
