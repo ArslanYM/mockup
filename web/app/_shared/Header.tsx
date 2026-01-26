@@ -41,7 +41,7 @@ export function Header({
   const defaultLogoLinkHref = "/";
   const defaultNavigation = [
     { name: "Home", href: "/#" },
-    { name: "Pricing", href: "/#pricing" },
+    { name: "Pricing", href: "/pricing" },
     { name: "Features", href: "/#features" },
     { name: "Contact", href: "/#contact" },
   ];

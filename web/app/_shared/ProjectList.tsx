@@ -21,10 +21,12 @@ const ProjectList = () => {
   }, []);
 
   return (
-    <>
-      {
+    <div>
+      {projects.length === 0 ? (
+        <></>
+      ) : (
         <>
-          projects.length == 0? <></> :
+          {" "}
           <div className="flex flex-col justify-center text-center py-30">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
@@ -51,8 +53,8 @@ const ProjectList = () => {
             )}
           </div>
         </>
-      }
-    </>
+      )}
+    </div>
   );
 };
 
