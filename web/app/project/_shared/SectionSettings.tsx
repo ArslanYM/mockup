@@ -8,6 +8,7 @@ import { RefreshDataContext } from "@/context/RefreshDataContext";
 import { SettingContext } from "@/context/SettingContext";
 import { THEME_NAME_LIST, THEMES } from "@/data/Themes";
 import { ProjectType } from "@/type/types";
+import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Camera, Loader, Share, Sparkles } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
@@ -30,6 +31,8 @@ function SectionSettings({
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState("Loading...");
   const { refreshData, setRefreshData } = useContext(RefreshDataContext);
+  const { has } = useAuth();
+  const hasPremiumAccess = has && has({ plan: "unlimited" });
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions, react-hooks/set-state-in-effect
@@ -45,11 +48,13 @@ function SectionSettings({
     }));
   }
 
-  function GenerateNewScreen() {
-    try {
-      setLoading(true);
-
-      const result = axios.post("/api/generate-config", {
+  async function GenerateNewScreen() {
+    setLoading(true);
+    if (!hasPremiumAccess) {
+      toast.error("Limited feature for paid users only");
+    }
+    try   {
+      const result = await axios.post("/api/generate-config", {
         userInput: userNewScreenInput,
         projectId: projectDetail?.projectId,
         deviceType: projectDetail?.device,

@@ -22,6 +22,7 @@ import { Rocket, Ship } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 const Hero = () => {
   const [userInput, setUserInput] = useState<string>();
   const [device, setDevice] = useState<string>("website");
@@ -80,6 +81,11 @@ const Hero = () => {
       device: device,
     });
 
+    if (result.data.Message == "Buy the pro version to create more") {
+      toast.error(result.data.Message);
+       setLoading(false);
+      return;
+    }
     console.log(result.data);
     setLoading(false);
 
